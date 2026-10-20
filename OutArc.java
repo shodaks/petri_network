@@ -4,4 +4,11 @@ public class OutArc extends Arc {
         super(weight, place);
     }
     
+    public void step() {
+        this.getPlace().addToken(this.getWeight());
+    }
+
+    public String toString() {
+        return "Arc sortant : " + this.getWeight();
+    }
 }

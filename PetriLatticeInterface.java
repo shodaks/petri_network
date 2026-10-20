@@ -1,8 +1,6 @@
-import java.util.ArrayList;
-
 public interface PetriLatticeInterface {
 
-    public Place addPlace(int token);
+    // public Place addPlace(int token);
 
     public Transition addTransition();
 

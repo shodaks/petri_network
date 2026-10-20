@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Transition implements PetriLatticeInterface.Transition{
+public class Transition {
 
     private ArrayList<OutArc> outArcs;
     private ArrayList<InArc> inArcs;
@@ -10,28 +10,47 @@ public class Transition implements PetriLatticeInterface.Transition{
         this.inArcs = new ArrayList<>();
     }
 
-    @Override
     public boolean isStepable() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isStepable'");
+        boolean _isStepable = true;
+        int i = 0;
+        while (i < this.inArcs.size() && _isStepable) {
+            InArc arc = this.getInArcs().get(i);
+            if (arc.isActive()) {
+                int weight = arc.getWeight();
+                int tokenPlace = arc.getPlace().getToken();
+                _isStepable = weight < tokenPlace;
+            }
+            i++;
+        }
+        return _isStepable;
     }
 
-    @Override
     public void step() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'step'");
+        if (this.isStepable()) {
+            for (InArc inarc : this.inArcs) {
+                if (inarc.isActive()) {
+                    inarc.step();
+                }
+            }
+            for (OutArc outarc : this.outArcs) {
+                outarc.step();
+            }
+        }
     }
 
-    @Override
     public ArrayList<InArc> getInArcs() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInArcs'");
+        return inArcs;
     }
 
-    @Override
     public ArrayList<OutArc> getOutArcs() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getOutArcs'");
+        return outArcs;
+    }
+
+    public void addInArc(InArc inarc) {
+        this.inArcs.add(inarc);
     }
     
+    public void addOutArc(OutArc outarc) {
+        this.outArcs.add(outarc);
+    }
 }

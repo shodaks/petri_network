@@ -1,4 +1,4 @@
-public class Arc implements PetriLatticeInterface.Arc{
+public class Arc{
 
     private int weight;
     private Place place;
@@ -8,18 +8,14 @@ public class Arc implements PetriLatticeInterface.Arc{
         this.place = place;
     }
 
-
-    @Override
     public int getWeight() {
         return this.weight;
     }
 
-    @Override
-    public PetriLatticeInterface.Place getPlace() {
+    public Place getPlace() {
         return this.place;
     }
 
-    @Override
     public void setWeight(int newWeight) {
         this.weight = newWeight;
     }

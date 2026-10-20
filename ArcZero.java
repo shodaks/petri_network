@@ -6,7 +6,7 @@ public class ArcZero extends InArc {
 
     @Override 
     public boolean isActive(){
-        return true;
+        return this.getPlace().getToken() == 0;
     }
     
 }
