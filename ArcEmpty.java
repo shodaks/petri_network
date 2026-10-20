@@ -6,7 +6,13 @@ public class ArcEmpty extends InArc {
 
     @Override 
     public boolean isActive(){
-        return true;
+        return this.getPlace().getToken() > 0;
+    }
+
+    @Override
+    public void step() {
+        int allToken = this.getPlace().getToken();
+        this.getPlace().removeToken(allToken);
     }
     
 }

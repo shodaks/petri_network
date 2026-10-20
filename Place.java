@@ -1,4 +1,4 @@
-public class Place implements PetriLatticeInterface.Place{
+public class Place {
 
     private int token;
 
@@ -6,19 +6,20 @@ public class Place implements PetriLatticeInterface.Place{
         this.token = token;
     }
 
-    @Override
     public int getToken() {
         return this.token;
     }
 
-    @Override
     public void addToken(int incrementToken) {
         this.token += incrementToken;
     }
 
-    @Override
     public void removeToken(int incrementToken) {
         this.token -= incrementToken;
+    }
+
+    public String toString() {
+        return "Place : " + this.getToken();
     }
     
 }
