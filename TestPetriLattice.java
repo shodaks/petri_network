@@ -32,16 +32,24 @@ public class TestPetriLattice {
         ae = plat.addArcEmpty(1, pl6, tr1);
     }
     public static void main(String[] args){
-
         TestPetriLattice test = new TestPetriLattice();
 
+        // Displaying places before and after a step
         System.out.println(test.plat.getPlaces());
 
         System.out.println(test.tr1.isStepable());
         test.tr1.step();
 
         System.out.println(test.plat.getPlaces());
-       
+
+        // transition is no longer stepable
+        System.out.println(test.tr1.isStepable());
+
+        // Removing the place (and the empty arc it is linked to)
+        test.plat.removePlace(test.pl6);
+        System.out.println(test.plat.getPlaces());
+        System.out.println(test.plat.getArcs());
+
 
     }
 }
