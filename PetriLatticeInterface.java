@@ -10,11 +10,11 @@ public interface PetriLatticeInterface {
 
     public Arc addArcEmpty(int weight, Place place, Transition transition);
 
-    public Arc addOutArc(int weight, Place place, Transition transition);
+    public Arc addOutArc(int weight, Transition transition, Place place);
 
     public void removeArc(Arc arc, Transition transition);
 
-    public void removePlace(Place place, Arc arc);
+    public void removePlace(Place place);
 
     //public void addToken(int incrementToken, Place place);
 

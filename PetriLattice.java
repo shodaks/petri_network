@@ -3,14 +3,36 @@ import java.util.ArrayList;
 public class PetriLattice implements PetriLatticeInterface{
 
     private ArrayList<Transition> transitions;
+    private ArrayList<Place> places;
+    private ArrayList<Arc> arcs;
 
-    @Override
+    public PetriLattice(){
+        this.transitions = new ArrayList<>();
+        this.places = new ArrayList<>();
+        this.arcs = new ArrayList<>();
+
+    }
+
+    public ArrayList<Transition> getTransitions(){
+        return this.transitions;
+    }
+
+    public ArrayList<Place> getPlaces(){
+        return this.places;
+    }
+
+    public ArrayList<Arc> getArcs(){
+        return this.arcs;
+    }
+
     /*
-    La fonction elle sert à rien si on stocke place nulle part.
-    p = new Place(token) fait la même chose
+    Add a place to the Perti lattice and return it
      */
-    public Place addPlace(int token) {
-        return new Place(token);    
+    public Place addPlace(int weight){
+        Place p;
+        p = new Place(weight);
+        this.places.add(p);
+        return p;
     }
 
     @Override
@@ -20,20 +42,21 @@ public class PetriLattice implements PetriLatticeInterface{
     public Transition addTransition() {
         Transition t;
         t = new Transition();
-        transitions.add(t);
+        this.transitions.add(t);
         return t;    
     }
 
     @Override
     /*
     Add a InArc. It is linked to a place and a transition and added to the 
-    transition InArcs list.
+    transition InArcs list. Also added in the petri lattice.
     It is also returned.
      */
-    public Arc addInArc(int weight, Place place, Transition transition) {
+    public InArc addInArc(int weight, Place place, Transition transition) {
         InArc a;
         a = new InArc(weight, place);
         transition.getInArcs().add(a);
+        this.arcs.add(a);
         return a;
     }
 
@@ -43,10 +66,11 @@ public class PetriLattice implements PetriLatticeInterface{
     transition OutArcs list.
     It is also returned.
      */
-    public Arc addOutArc(int weight, Place place, Transition transition) {
+    public OutArc addOutArc(int weight, Transition transition, Place place) {
         OutArc a;
         a = new OutArc(weight, place);
         transition.getOutArcs().add(a);
+        this.arcs.add(a);
         return a;
     }
 
@@ -56,10 +80,11 @@ public class PetriLattice implements PetriLatticeInterface{
     transition InArcs list.
     It is also returned.
      */
-    public Arc addArcZero(int weight, Place place, Transition transition) {
+    public ArcZero addArcZero(int weight, Place place, Transition transition) {
         ArcZero a;
         a = new ArcZero(weight, place);
         transition.getInArcs().add(a);
+        this.arcs.add(a);
         return a;
     }
 
@@ -69,10 +94,11 @@ public class PetriLattice implements PetriLatticeInterface{
     transition InArcs list.
     It is also returned.
      */
-    public Arc addArcEmpty(int weight, Place place, Transition transition) {
+    public ArcEmpty addArcEmpty(int weight, Place place, Transition transition) {
         ArcEmpty a;
         a = new ArcEmpty(weight, place);
         transition.getInArcs().add(a);
+        this.arcs.add(a);
         return a;    
     }
 
@@ -87,20 +113,63 @@ public class PetriLattice implements PetriLatticeInterface{
         else {
             transition.getInArcs().remove(arc);
         }
+        this.arcs.remove(arc);
     }
 
     @Override
     /*
-    place n'est stocké nul part, il faut le remove dans arc.place.
+    Remove a place from the petri lattice. Also remove all its connected arcs.
      */
-    public void removePlace(Place place, Arc arc) {
-        arc.getP.
+    public void removePlace(Place place) {
+        for (Transition t : transitions){
+            for (Arc a : t.getInArcs()){
+                if (a.getPlace().equals(place)){
+                    t.getInArcs().remove(a);
+                    break;
+                }
+            }
+            for (Arc a : t.getOutArcs()){
+                if (a.getPlace().equals(place)){
+                    t.getOutArcs().remove(a);
+                    break;
+                }
+            }
+        }
+        places.remove(place);
     }
 
     @Override
     public void removeTransition(Transition transition) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeTransition'");
+        transitions.remove(transition);
+    }
+
+    public String toString() {
+        String out = "";
+        for (Transition t : transitions) {
+            for (InArc inarc : t.getInArcs()) {
+                out += (inarc.getPlace().toString() + " -> " + inarc.toString() + "\n");
+            }
+            for (OutArc outarc : t.getOutArcs()) {
+                out += (outarc.toString() + " -> " + outarc.getPlace().toString() + "\n");
+            }
+        }
+        return out;
+    }
+
+    public void main() {
+        PetriLattice PL1 = new PetriLattice();
+        Transition t1 = PL1.addTransition();
+        Place p1 = new Place(5);
+        Place p2 = new Place(2);
+        InArc arcin = new InArc(1, p1);
+        t1.addInArc(arcin);
+        OutArc arcout = new OutArc(10,p2);
+        t1.addOutArc(arcout);
+        System.out.println(PL1.toString());
+        t1.step();
+        System.out.println(PL1.toString());
+
+        
     }
     
 }
