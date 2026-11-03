@@ -4,58 +4,46 @@ public class PetriLattice implements PetriLatticeInterface{
 
     private ArrayList<Transition> transitions;
 
-    @Override
-    public PetriLatticeInterface.Place addPlace(int token) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addPlace'");
+    public PetriLattice() {
+        transitions = new ArrayList<>();
     }
 
     @Override
-    public PetriLatticeInterface.Transition addTransition() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addTransition'");
+    public Transition addTransition() {
+        Transition t = new Transition();
+        this.transitions.add(t);
+        return t;
     }
 
     @Override
-    public PetriLatticeInterface.Arc addInArc(int weight, PetriLatticeInterface.Place place) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addInArc'");
+    public void removeTransition(Transition transition) {
+        this.transitions.remove(transition);
     }
 
-    @Override
-    public PetriLatticeInterface.Arc addArcZero(int weight, PetriLatticeInterface.Place place) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addArcZero'");
+    public String toString() {
+        String out = "";
+        for (Transition t : transitions) {
+            for (InArc inarc : t.getInArcs()) {
+                out += (inarc.getPlace().toString() + " -> " + inarc.toString() + "\n");
+            }
+            for (OutArc outarc : t.getOutArcs()) {
+                out += (outarc.toString() + " -> " + outarc.getPlace().toString() + "\n");
+            }
+        }
+        return out;
     }
 
-    @Override
-    public PetriLatticeInterface.Arc addArcEmpty(int weight, PetriLatticeInterface.Place place) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addArcEmpty'");
+    public void main() {
+        PetriLattice PL1 = new PetriLattice();
+        Transition t1 = PL1.addTransition();
+        Place p1 = new Place(5);
+        Place p2 = new Place(2);
+        InArc arcin = new InArc(1, p1);
+        t1.addInArc(arcin);
+        OutArc arcout = new OutArc(10,p2);
+        t1.addOutArc(arcout);
+        System.out.println(PL1.toString());
+        t1.step();
+        System.out.println(PL1.toString());
     }
-
-    @Override
-    public PetriLatticeInterface.Arc addOutArc(int weight, PetriLatticeInterface.Place place) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addOutArc'");
-    }
-
-    @Override
-    public void removeArc(PetriLatticeInterface.Arc arc) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeArc'");
-    }
-
-    @Override
-    public void removePlace(PetriLatticeInterface.Place place) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removePlace'");
-    }
-
-    @Override
-    public void removeTransition(PetriLatticeInterface.Transition transition) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeTransition'");
-    }
-    
 }

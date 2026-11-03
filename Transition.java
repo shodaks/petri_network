@@ -18,7 +18,7 @@ public class Transition {
             if (arc.isActive()) {
                 int weight = arc.getWeight();
                 int tokenPlace = arc.getPlace().getToken();
-                _isStepable = weight < tokenPlace;
+                _isStepable = weight <= tokenPlace;
             }
             i++;
         }
