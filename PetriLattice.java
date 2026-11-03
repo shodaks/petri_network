@@ -39,9 +39,9 @@ public class PetriLattice implements PetriLatticeInterface{
     /*
     Add a transition to the transition list and return it
      */
-    public Transition addTransition() {
+    public Transition addTransition(String name) {
         Transition t;
-        t = new Transition();
+        t = new Transition(name);
         this.transitions.add(t);
         return t;    
     }
@@ -52,9 +52,9 @@ public class PetriLattice implements PetriLatticeInterface{
     transition InArcs list. Also added in the petri lattice.
     It is also returned.
      */
-    public InArc addInArc(int weight, Place place, Transition transition) {
+    public InArc addInArc(String name, int weight, Place place, Transition transition) {
         InArc a;
-        a = new InArc(weight, place);
+        a = new InArc(name, weight, place);
         transition.getInArcs().add(a);
         this.arcs.add(a);
         return a;
@@ -66,9 +66,9 @@ public class PetriLattice implements PetriLatticeInterface{
     transition OutArcs list.
     It is also returned.
      */
-    public OutArc addOutArc(int weight, Transition transition, Place place) {
+    public OutArc addOutArc(String name, int weight, Transition transition, Place place) {
         OutArc a;
-        a = new OutArc(weight, place);
+        a = new OutArc(name , weight, place);
         transition.getOutArcs().add(a);
         this.arcs.add(a);
         return a;
@@ -80,9 +80,9 @@ public class PetriLattice implements PetriLatticeInterface{
     transition InArcs list.
     It is also returned.
      */
-    public ArcZero addArcZero(int weight, Place place, Transition transition) {
+    public ArcZero addArcZero(String name, int weight, Place place, Transition transition) {
         ArcZero a;
-        a = new ArcZero(weight, place);
+        a = new ArcZero(name, weight, place);
         transition.getInArcs().add(a);
         this.arcs.add(a);
         return a;
@@ -94,9 +94,9 @@ public class PetriLattice implements PetriLatticeInterface{
     transition InArcs list.
     It is also returned.
      */
-    public ArcEmpty addArcEmpty(int weight, Place place, Transition transition) {
+    public ArcEmpty addArcEmpty(String name, int weight, Place place, Transition transition) {
         ArcEmpty a;
-        a = new ArcEmpty(weight, place);
+        a = new ArcEmpty(name, weight, place);
         transition.getInArcs().add(a);
         this.arcs.add(a);
         return a;    
@@ -158,12 +158,12 @@ public class PetriLattice implements PetriLatticeInterface{
 
     public void main() {
         PetriLattice PL1 = new PetriLattice();
-        Transition t1 = PL1.addTransition();
+        Transition t1 = PL1.addTransition("t1");
         Place p1 = new Place(5);
         Place p2 = new Place(2);
-        InArc arcin = new InArc(1, p1);
+        InArc arcin = new InArc("a1", 1, p1);
         t1.addInArc(arcin);
-        OutArc arcout = new OutArc(10,p2);
+        OutArc arcout = new OutArc("a2", 10, p2);
         t1.addOutArc(arcout);
         System.out.println(PL1.toString());
         t1.step();

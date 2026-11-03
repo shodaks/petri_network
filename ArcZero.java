@@ -1,7 +1,7 @@
 public class ArcZero extends InArc {
 
-    public ArcZero(int weight, Place place) {
-        super(weight, place);
+    public ArcZero(String name, int weight, Place place) {
+        super(name, weight, place);
     }
 
     @Override 

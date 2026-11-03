@@ -1,7 +1,7 @@
 public class OutArc extends Arc {
 
-    public OutArc(int weight, Place place) {
-        super(weight, place);
+    public OutArc(String name, int weight, Place place) {
+        super(name, weight, place);
     }
     
     public void step() {

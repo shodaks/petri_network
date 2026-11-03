@@ -4,10 +4,20 @@ public class Transition {
 
     private ArrayList<OutArc> outArcs;
     private ArrayList<InArc> inArcs;
+    private String name;
 
-    public Transition() {
+    public Transition(String name) {
+        this.name = name;
         this.outArcs = new ArrayList<>();
         this.inArcs = new ArrayList<>();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean isStepable() {
