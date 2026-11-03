@@ -50,6 +50,5 @@ public class TestPetriLattice {
         System.out.println(test.plat.getPlaces());
         System.out.println(test.plat.getArcs());
 
-
     }
 }

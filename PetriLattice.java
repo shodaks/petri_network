@@ -125,12 +125,14 @@ public class PetriLattice implements PetriLatticeInterface{
             for (Arc a : t.getInArcs()){
                 if (a.getPlace().equals(place)){
                     t.getInArcs().remove(a);
+                    this.removeArc(a, t);
                     break;
                 }
             }
             for (Arc a : t.getOutArcs()){
                 if (a.getPlace().equals(place)){
                     t.getOutArcs().remove(a);
+                    this.removeArc(a, t);
                     break;
                 }
             }
