@@ -1,7 +1,7 @@
 public class InArc extends Arc{
 
-    public InArc(int weight, Place place) {
-        super(weight, place);
+    public InArc(String name, int weight, Place place) {
+        super(name, weight, place);
     }
 
     public boolean isActive(){

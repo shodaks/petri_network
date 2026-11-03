@@ -1,7 +1,7 @@
 public class ArcEmpty extends InArc {
 
-    public ArcEmpty(int weight, Place place) {
-        super(weight, place);
+    public ArcEmpty(String name, int weight, Place place) {
+        super(name, weight, place);
     }
 
     @Override 
