@@ -17,19 +17,19 @@ public class TestPetriLattice {
 
     public TestPetriLattice(){
         plat = new PetriLattice();
-        tr1 = plat.addTransition();
-        pl1 = plat.addPlace(5);
-        pl2 = plat.addPlace(3);
-        pl3 = plat.addPlace(1);
-        pl4 = plat.addPlace(1);
-        pl5 = plat.addPlace(1);
-        pl6 = plat.addPlace(1);
-        a1 = plat.addInArc(2, pl1, tr1); 
-        a2 = plat.addInArc(3, pl2, tr1); 
-        a3 = plat.addOutArc(4, tr1, pl3); 
-        a4 = plat.addOutArc(1, tr1, pl4); 
-        a0 = plat.addArcZero(1, pl5, tr1); 
-        ae = plat.addArcEmpty(1, pl6, tr1);
+        tr1 = plat.addTransition("tr1");
+        pl1 = plat.addPlace("pl1",5);
+        pl2 = plat.addPlace("pl2",3);
+        pl3 = plat.addPlace("pl3",1);
+        pl4 = plat.addPlace("pl4",1);
+        pl5 = plat.addPlace("pl5",1);
+        pl6 = plat.addPlace("pl6",1);
+        a1 = plat.addInArc("a1",2, pl1, tr1); 
+        a2 = plat.addInArc("a2",3, pl2, tr1); 
+        a3 = plat.addOutArc("a3",4, tr1, pl3); 
+        a4 = plat.addOutArc("a4",1, tr1, pl4); 
+        a0 = plat.addArcZero("a0",1, pl5, tr1); 
+        ae = plat.addArcEmpty("ae",1, pl6, tr1);
     }
     public static void main(String[] args){
         TestPetriLattice test = new TestPetriLattice();
