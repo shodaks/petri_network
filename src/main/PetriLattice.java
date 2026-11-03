@@ -54,6 +54,11 @@ public class PetriLattice implements PetriLatticeInterface{
      */
     public InArc addInArc(String name, int weight, Place place, Transition transition) {
         InArc a;
+        for (Arc arc : transition.getInArcs()){
+            if (arc.getPlace().equals(place)){
+                throw new IllegalArgumentException("La transition " + transition.getName() + " a déjà un arc entrant depuis la place " + place.getName());
+            }
+        }
         a = new InArc(name, weight, place);
         transition.getInArcs().add(a);
         this.arcs.add(a);
@@ -68,6 +73,11 @@ public class PetriLattice implements PetriLatticeInterface{
      */
     public OutArc addOutArc(String name, int weight, Transition transition, Place place) {
         OutArc a;
+        for (Arc arc : transition.getOutArcs()){
+            if (arc.getPlace().equals(place)){
+                throw new IllegalArgumentException("La transition " + transition.getName() + " a déjà un arc sortant vers la place " + place.getName());
+            }
+        }
         a = new OutArc(name , weight, place);
         transition.getOutArcs().add(a);
         this.arcs.add(a);
@@ -80,9 +90,14 @@ public class PetriLattice implements PetriLatticeInterface{
     transition InArcs list.
     It is also returned.
      */
-    public ArcZero addArcZero(String name, int weight, Place place, Transition transition) {
+    public ArcZero addArcZero(String name, Place place, Transition transition) {
         ArcZero a;
-        a = new ArcZero(name, weight, place);
+        for (Arc arc : transition.getInArcs()){
+            if (arc.getPlace().equals(place)){
+                throw new IllegalArgumentException("La transition " + transition.getName() + " a déjà un arc entrant depuis la place " + place.getName());
+            }
+        }
+        a = new ArcZero(name, place);
         transition.getInArcs().add(a);
         this.arcs.add(a);
         return a;
@@ -94,9 +109,14 @@ public class PetriLattice implements PetriLatticeInterface{
     transition InArcs list.
     It is also returned.
      */
-    public ArcEmpty addArcEmpty(String name, int weight, Place place, Transition transition) {
+    public ArcEmpty addArcEmpty(String name, Place place, Transition transition) {
         ArcEmpty a;
-        a = new ArcEmpty(name, weight, place);
+        for (Arc arc : transition.getInArcs()){
+            if (arc.getPlace().equals(place)){
+                throw new IllegalArgumentException("La transition " + transition.getName() + " a déjà un arc entrant depuis la place " + place.getName());
+            }
+        }
+        a = new ArcEmpty(name, 0, place);
         transition.getInArcs().add(a);
         this.arcs.add(a);
         return a;    

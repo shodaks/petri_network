@@ -6,12 +6,10 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Identification du projet -->
-    <groupId>org.example</groupId>
-    <artifactId>junit-tutorial-idl</artifactId>
+    <groupId>fr.imt.mapd</groupId>
+    <artifactId>petri_network</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <!-- Version de Java et encodage -->
     <properties>
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,7 +24,6 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-
         <!-- Permet d'exécuter AllTests.java avec @Suite -->
         <dependency>
             <groupId>org.junit.platform</groupId>
@@ -36,8 +33,10 @@
         </dependency>
     </dependencies>
 
-    <!-- Compilation et exécution des tests -->
     <build>
+        <!-- Notre arborescence : src/main et src/test (pas src/main/java) -->
+        <sourceDirectory>src/main</sourceDirectory>
+        <testSourceDirectory>src/test</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

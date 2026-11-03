@@ -28,8 +28,8 @@ public class TestPetriLattice {
         a2 = plat.addInArc("a2",3, pl2, tr1); 
         a3 = plat.addOutArc("a3",4, tr1, pl3); 
         a4 = plat.addOutArc("a4",1, tr1, pl4); 
-        a0 = plat.addArcZero("a0",1, pl5, tr1); 
-        ae = plat.addArcEmpty("ae",1, pl6, tr1);
+        a0 = plat.addArcZero("a0", pl5, tr1); 
+        ae = plat.addArcEmpty("ae",pl6, tr1);
     }
     public static void main(String[] args){
         TestPetriLattice test = new TestPetriLattice();

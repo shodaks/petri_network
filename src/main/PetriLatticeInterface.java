@@ -8,9 +8,9 @@ public interface PetriLatticeInterface {
 
     public Arc addInArc(String name, int weight, Place place, Transition transition);
 
-    public Arc addArcZero(String name, int weight, Place place, Transition transition);
+    public Arc addArcZero(String name, Place place, Transition transition);
 
-    public Arc addArcEmpty(String name, int weight, Place place, Transition transition);
+    public Arc addArcEmpty(String name, Place place, Transition transition);
 
     public Arc addOutArc(String name,int weight, Transition transition, Place place);
 
