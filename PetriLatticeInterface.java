@@ -4,17 +4,17 @@ public interface PetriLatticeInterface {
 
     public Transition addTransition();
 
-    // public Arc addInArc(int weight, Place place);
+    public Arc addInArc(int weight, Place place, Transition transition);
 
-    // public Arc addArcZero(int weight, Place place);
+    public Arc addArcZero(int weight, Place place, Transition transition);
 
-    // public Arc addArcEmpty(int weight, Place place);
+    public Arc addArcEmpty(int weight, Place place, Transition transition);
 
-    // public Arc addOutArc(int weight, Place place);
+    public Arc addOutArc(int weight, Transition transition, Place place);
 
-    // public void removeArc(Arc arc);
+    public void removeArc(Arc arc, Transition transition);
 
-    // public void removePlace(Place place);
+    public void removePlace(Place place);
 
     //public void addToken(int incrementToken, Place place);
 
@@ -22,5 +22,5 @@ public interface PetriLatticeInterface {
 
     public void removeTransition(Transition transition);
 
-    //public void step(Transition transition);
+    //public void step(Transition transition);    
 }
