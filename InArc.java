@@ -13,6 +13,6 @@ public class InArc extends Arc{
     }
     
     public String toString() {
-        return "Arc entrant : " + this.getWeight();
+        return "Arc entrant (" + this.getName() + ") : " + this.getWeight();
     }
 }

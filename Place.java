@@ -1,9 +1,19 @@
 public class Place {
 
     private int token;
+    private String name;
 
-    public Place(int token) {
+    public Place(String name, int token) {
+        this.name = name;
         this.token = token;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getToken() {
@@ -19,7 +29,7 @@ public class Place {
     }
 
     public String toString() {
-        return "Place : " + this.getToken();
+        return "Place (" + this.getName() + ") : " + this.getToken();
     }
     
 }

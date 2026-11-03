@@ -9,6 +9,6 @@ public class OutArc extends Arc {
     }
 
     public String toString() {
-        return "Arc sortant : " + this.getWeight();
+        return "Arc sortant (" + this.getName() + ") : " + this.getWeight();
     }
 }

@@ -4,6 +4,8 @@ public interface PetriLatticeInterface {
 
     public Transition addTransition(String name);
 
+    public Place addPlace(String name, int weight);
+
     public Arc addInArc(String name, int weight, Place place, Transition transition);
 
     public Arc addArcZero(String name, int weight, Place place, Transition transition);

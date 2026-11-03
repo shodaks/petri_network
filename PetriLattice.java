@@ -28,9 +28,9 @@ public class PetriLattice implements PetriLatticeInterface{
     /*
     Add a place to the Perti lattice and return it
      */
-    public Place addPlace(int weight){
+    public Place addPlace(String name, int weight){
         Place p;
-        p = new Place(weight);
+        p = new Place(name, weight);
         this.places.add(p);
         return p;
     }
@@ -159,8 +159,8 @@ public class PetriLattice implements PetriLatticeInterface{
     public void main() {
         PetriLattice PL1 = new PetriLattice();
         Transition t1 = PL1.addTransition("t1");
-        Place p1 = new Place(5);
-        Place p2 = new Place(2);
+        Place p1 = PL1.addPlace("p1", 5);
+        Place p2 = PL1.addPlace("p2", 2);
         InArc arcin = new InArc("a1", 1, p1);
         t1.addInArc(arcin);
         OutArc arcout = new OutArc("a2", 10, p2);
