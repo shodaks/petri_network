@@ -6,6 +6,9 @@ public abstract class Arc{
 
     public Arc(String name, int weight, Place place) {
         this.name = name;
+        if (weight < 0) {
+            throw new IllegalArgumentException("weight must be non-negative"); // Ajouté suite aux remarques de l'autre groupe
+        }
         this.weight = weight;
         this.place = place;
     }
@@ -31,6 +34,9 @@ public abstract class Arc{
     }
 
     public void setWeight(int newWeight) {
+        if (newWeight < 0) {
+            throw new IllegalArgumentException("weight must be non-negative"); // Ajouté suite aux remarques de l'autre groupe
+        }
         this.weight = newWeight;
     }
     

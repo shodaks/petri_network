@@ -116,7 +116,7 @@ public class PetriLattice implements PetriLatticeInterface{
                 throw new IllegalArgumentException("La transition " + transition.getName() + " a déjà un arc entrant depuis la place " + place.getName());
             }
         }
-        a = new ArcEmpty(name, 0, place);
+        a = new ArcEmpty(name, place);
         transition.getInArcs().add(a);
         this.arcs.add(a);
         return a;    

@@ -21,29 +21,18 @@ public class Transition {
     }
 
     public boolean isStepable() {
-        boolean _isStepable = true;
-        int i = 0;
-        while (i < this.inArcs.size() && _isStepable) {
-            InArc arc = this.getInArcs().get(i);
-            if (arc.isActive()) {
-                int weight = arc.getWeight();
-                int tokenPlace = arc.getPlace().getToken();
-                _isStepable = weight <= tokenPlace;
+        for (InArc inarc : this.inArcs) {
+            if (!inarc.isActive()) {
+                return false;
             }
-            else {
-                _isStepable = false;
-            }
-            i++;
         }
-        return _isStepable;
+        return true;
     }
 
     public void step() {
         if (this.isStepable()) {
             for (InArc inarc : this.inArcs) {
-                if (inarc.isActive()) {
-                    inarc.step();
-                }
+                inarc.step();
             }
             for (OutArc outarc : this.outArcs) {
                 outarc.step();

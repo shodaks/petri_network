@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8dc069fb-cf90-414c-a0ef-6e64164a2afb" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Arc.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Arc.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/ArcEmpty.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/ArcEmpty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/ArcZero.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/ArcZero.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/InArc.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/InArc.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/PetriLattice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/PetriLattice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Transition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Transition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/AllTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/AllTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,10 +22,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5,
-  "fromUser": false
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5,
+  &quot;fromUser&quot;: false
+}</component>
   <component name="ProjectId" id="3LamiX7ynYUm1SuwCmzF1aQlE19" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -26,6 +33,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JUnit.AllTests.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",

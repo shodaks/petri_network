@@ -5,5 +5,5 @@ import org.junit.platform.suite.api.Suite;
  * Regroupe toutes les classes de tests (lancement en un clic depuis IntelliJ).
  */
 @Suite
-@SelectClasses({TestPlace.class, TestTransition.class})
+@SelectClasses({TestPlace.class, TestTransition.class, TestInArc.class, TestOutArc.class})
 public class AllTests {}

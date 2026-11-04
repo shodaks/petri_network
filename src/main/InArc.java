@@ -5,10 +5,13 @@ public class InArc extends Arc{
     }
 
     public boolean isActive(){
-        return true;
+        return this.getPlace().getToken() >= this.getWeight();
     }
     
     public void step() {
+        if (this.getPlace().getToken() < this.getWeight()) {
+            throw new IllegalArgumentException("Exigence 7 : retirer plus de jetons que la place n'en contient ne doit pas la rendre négative");
+        }
         this.getPlace().removeToken(this.getWeight());
     }
     
