@@ -1,8 +1,20 @@
+package model;
+
+/**
+ * A place of a Petri net. It has a name and holds a non-negative number of tokens.
+ */
 public class Place {
 
     private int token;
     private String name;
 
+    /**
+     * Creates a place.
+     *
+     * @param name  the name of the place
+     * @param token the initial number of tokens
+     * @throws IllegalArgumentException if token is negative
+     */
     public Place(String name, int token) {
         this.name = name;
         if (token < 0) {
@@ -11,14 +23,29 @@ public class Place {
         this.token = token;
     }
 
+    /**
+     * Returns the name of the place.
+     *
+     * @return the name of the place
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Changes the name of the place.
+     *
+     * @param name the new name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the number of tokens of the place.
+     *
+     * @return the number of tokens
+     */
     public int getToken() {
         return this.token;
     }
@@ -52,6 +79,11 @@ public class Place {
         this.token -= incrementToken;
     }
 
+    /**
+     * Returns a textual description of the place.
+     *
+     * @return the description, e.g. "Place (P0) : 2"
+     */
     public String toString() {
         return "Place (" + this.getName() + ") : " + this.getToken();
     }

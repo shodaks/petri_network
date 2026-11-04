@@ -1,15 +1,18 @@
+import model.OutArc;
+import model.Place;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests unitaires de {@link OutArc}.
+ * Unit tests of {@link OutArc}.
  *
- * Adaptés du tutoriel JUnit (jroyer) à notre API :
+ * Adapted from the JUnit tutorial (jroyer) to our API:
  * Arc(String, int, Place), getName(), getWeight(), getPlace(), setName(), setWeight(), setPlace().
- * Les tests sur les arcs, qui étaient portés par Place dans le tutoriel,
- * sont dans TestTransition : chez nous ce sont les transitions qui connaissent leurs arcs.
+ * The tests on arcs, which belonged to Place in the tutorial,
+ * are in TestTransition: in our design transitions are the ones that know their arcs.
  */
 
 
@@ -21,22 +24,24 @@ public class TestOutArc {
 
 	@BeforeEach
 	void setUp() {
-		// Une place neuve pour chaque test : pas de dépendance à l'ordre d'exécution
+		// A fresh place for each test: no dependency on the execution order
 		p = new Place("P0", 0);
 		a = new OutArc("A0", 3, p);
 	}
 
 	@Test
-	void testConstructeurOutArc() {
+	void testConstructorOutArc() {
 		assertEquals("A0", a.getName());
         assertEquals(3, a.getWeight());
 		assertEquals("P0", a.getPlace().getName());
 	}
 
 	@Test
-	void testConstructeurOutArcPoidsNegatif() {
+	void testConstructorOutArcNegativeWeight() {
 		assertThrows(IllegalArgumentException.class, () -> new OutArc("A0", -1, p),
-				"Exigence 7 : un arc ne peut pas être créé avec un poids négatif");
+				"Requirement 7: an arc cannot have a negative weight");
+		assertThrows(IllegalArgumentException.class, () -> new OutArc("A0", 0, p),
+				"Requirement 6: an arc weight must be strictly positive");
 	}
 
 	@Test
@@ -69,7 +74,7 @@ public class TestOutArc {
 
 	@Test
 	void testToString() {
-		assertEquals("Arc sortant (A0) : 3", a.toString());
+		assertEquals("Outgoing arc (A0) : 3", a.toString());
 	}
 
 	@Test
@@ -79,9 +84,9 @@ public class TestOutArc {
 	}
 
 	@Test
-	void testSetWeightNegatif() {
+	void testSetWeightNegative() {
 		assertThrows(IllegalArgumentException.class, () -> a.setWeight(-1),
-				"Exigence 7 : un arc ne peut pas être créé avec un poids négatif");
+				"Requirement 7: an arc cannot have a negative weight");
 	}
 
 	@Test

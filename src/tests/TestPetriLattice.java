@@ -1,3 +1,11 @@
+import model.ArcEmpty;
+import model.ArcZero;
+import model.InArc;
+import model.OutArc;
+import model.Place;
+import model.Transition;
+import network.PetriLattice;
+
 public class TestPetriLattice {
 
     private PetriLattice plat;

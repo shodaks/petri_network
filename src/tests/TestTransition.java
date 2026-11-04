@@ -1,12 +1,18 @@
+import model.InArc;
+import model.OutArc;
+import model.Place;
+import model.Transition;
+import network.PetriLattice;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests unitaires de {@link Transition} (et des arcs qu'elle porte).
+ * Unit tests of {@link Transition} (and of the arcs it holds).
  *
- * Adaptés du tutoriel JUnit (jroyer) à notre API :
+ * Adapted from the JUnit tutorial (jroyer) to our API:
  * PetriLattice, addInArc / addOutArc, isStepable() (ex-isTriggerable), step() (ex-trigger).
  */
 public class TestTransition {
@@ -16,7 +22,7 @@ public class TestTransition {
 	private Transition t0, t1;
 
 	/**
-	 * Réseau du tutoriel, reconstruit avant chaque test :
+	 * Network of the tutorial, rebuilt before each test:
 	 * P0(1) -1-> T0 -2-> P1(0) -1-> T1 -2-> P0
 	 */
 	@BeforeEach
@@ -35,7 +41,7 @@ public class TestTransition {
 	// ---------------------------------------------------------------- Construction
 
 	@Test
-	void testConstructeur() {
+	void testConstructor() {
 		Transition t = new Transition("XXX");
 		assertEquals("XXX", t.getName());
 		assertTrue(t.getInArcs().isEmpty());
@@ -50,7 +56,7 @@ public class TestTransition {
 	}
 
 	// ---------------------------------------------------------------- Arcs
-	// (dans le tutoriel : Place.addArcEntrant / addArcSortant)
+	// (in the tutorial: Place.addArcEntrant / addArcSortant)
 
 	@Test
 	void testAddInArc() {
@@ -79,7 +85,7 @@ public class TestTransition {
 	}
 
 	@Test
-	void testAddArcsDirectementSurTransition() {
+	void testAddArcsDirectlyOnTransition() {
 		Place p = new Place("P", 0);
 		Transition t = new Transition("T");
 		InArc in = new InArc("in", 1, p);
@@ -90,27 +96,27 @@ public class TestTransition {
 		assertSame(out, t.getOutArcs().get(0));
 	}
 
-	// Exigence 3 : « Il ne peut y avoir qu'un arc dans le même sens entre une place et une transition »
+	// Requirement 3: "There can be only one arc in the same direction between a place and a transition"
 	@Test
-	void testUnSeulArcEntrantParPlace() {
+	void testOnlyOneInArcPerPlace() {
 		assertThrows(IllegalArgumentException.class, () -> {
-			pl.addInArc("doublon", 3, p0, t0);
-		}, "Exigence 3 : un 2e arc P0 -> T0 ne doit pas être ajouté");
+			pl.addInArc("duplicate", 3, p0, t0);
+		}, "Requirement 3: a 2nd arc P0 -> T0 must not be added");
 	}
 
 	@Test
-	void testUnSeulArcSortantParPlace() {
+	void testOnlyOneOutArcPerPlace() {
 		assertThrows(IllegalArgumentException.class, () -> {
-			pl.addOutArc("doublon", 3, t0, p1);
-		}, "Exigence 3 : un 2e arc T0 -> P1 ne doit pas être ajouté");
+			pl.addOutArc("duplicate", 3, t0, p1);
+		}, "Requirement 3: a 2nd arc T0 -> P1 must not be added");
 	}
 
-	// ---------------------------------------------------------------- Tir (arcs classiques)
+	// ---------------------------------------------------------------- Step (classic arcs)
 
 	@Test
 	void testIsStepable() {
-		assertTrue(t0.isStepable());   // P0 contient 1 jeton, l'arc demande 1
-		assertFalse(t1.isStepable());  // P1 est vide, l'arc demande 1
+		assertTrue(t0.isStepable());   // P0 holds 1 token, the arc requires 1
+		assertFalse(t1.isStepable());  // P1 is empty, the arc requires 1
 	}
 
 	@Test
@@ -123,16 +129,16 @@ public class TestTransition {
 	}
 
 	@Test
-	void testStepNonTirableNeChangeRien() {
+	void testStepNotStepableChangesNothing() {
 		t1.step();
 		assertEquals(1, p0.getToken());
 		assertEquals(0, p1.getToken());
 	}
 
 	@Test
-	void testDeuxStepsSuccessifs() {
-		// Le tutoriel tirait T0 deux fois sans rien vérifier :
-		// le 2e tir doit être sans effet car T0 n'est plus tirable.
+	void testTwoConsecutiveSteps() {
+		// The tutorial stepped T0 twice without checking anything:
+		// the 2nd step must have no effect because T0 is no longer stepable.
 		t0.step();
 		t0.step();
 		assertEquals(0, p0.getToken());
@@ -148,8 +154,8 @@ public class TestTransition {
 	}
 
 	@Test
-	void testTransitionSansArcEntrantEstTirable() {
-		// Cas du cahier des charges : une transition avec un arc vers une place vide
+	void testTransitionWithoutInArcIsStepable() {
+		// Case of the specification: a transition with an arc to an empty place
 		Place p = pl.addPlace("P", 0);
 		Transition t = pl.addTransition("T");
 		pl.addOutArc("a", 1, t, p);
@@ -159,57 +165,57 @@ public class TestTransition {
 		assertTrue(t.isStepable());
 	}
 
-	// ---------------------------------------------------------------- Arcs zéro et videurs (TD2)
+	// ---------------------------------------------------------------- Zero arcs and emptying arcs (TD2)
 
-	// « Les arcs zéro ne sont actifs que quand la place source est vide. »
+	// "Zero arcs are active only when the source place is empty."
 	@Test
-	void testArcZeroPlaceVideTirable() {
+	void testArcZeroEmptyPlaceStepable() {
 		Place p = pl.addPlace("P", 0);
 		Transition t = pl.addTransition("T");
 		pl.addArcZero("z", p, t);
 		assertTrue(t.isStepable(),
-				"Arc zéro : la transition doit être tirable quand la place source est vide");
+				"Zero arc: the transition must be stepable when the source place is empty");
 	}
 
 	@Test
-	void testArcZeroStepNeModifiePasLaPlace() {
+	void testArcZeroStepDoesNotModifyPlace() {
 		Place p = pl.addPlace("P", 0);
-		Place sortie = pl.addPlace("S", 0);
+		Place output = pl.addPlace("S", 0);
 		Transition t = pl.addTransition("T");
 		pl.addArcZero("z", p, t);
-		pl.addOutArc("o", 1, t, sortie);
+		pl.addOutArc("o", 1, t, output);
 		t.step();
-		assertEquals(0, p.getToken(), "Arc zéro : le tir ne doit pas retirer de jeton de la place source");
-		assertEquals(1, sortie.getToken(), "Arc zéro : la transition doit avoir été tirée");
+		assertEquals(0, p.getToken(), "Zero arc: the step must not remove any token from the source place");
+		assertEquals(1, output.getToken(), "Zero arc: the transition must have been stepped");
 	}
 
 	@Test
-	void testArcZeroPlaceNonVideNonTirable() {
+	void testArcZeroNonEmptyPlaceNotStepable() {
 		Place p = pl.addPlace("P", 1);
 		Transition t = pl.addTransition("T");
 		pl.addArcZero("z", p, t);
 		assertFalse(t.isStepable(),
-				"Arc zéro : la transition ne doit pas être tirable quand la place source contient des jetons");
+				"Zero arc: the transition must not be stepable when the source place holds tokens");
 	}
 
-	// « Les arcs videurs sont actifs dès qu'il y a un jeton dans la place source
-	//   et enlèvent tous les jetons présents lorsqu'ils sont activés. »
+	// "Emptying arcs are active as soon as the source place holds a token
+	//   and remove all the tokens present when they are activated."
 	@Test
-	void testArcVideurVideLaPlace() {
+	void testArcEmptyEmptiesPlace() {
 		Place p = pl.addPlace("P", 3);
 		Transition t = pl.addTransition("T");
 		pl.addArcEmpty("v", p, t);
 		assertTrue(t.isStepable());
 		t.step();
-		assertEquals(0, p.getToken(), "Arc videur : le tir doit enlever tous les jetons");
+		assertEquals(0, p.getToken(), "Emptying arc: the step must remove all the tokens");
 	}
 
 	@Test
-	void testArcVideurPlaceVideNonTirable() {
+	void testArcEmptyEmptyPlaceNotStepable() {
 		Place p = pl.addPlace("P", 0);
 		Transition t = pl.addTransition("T");
 		pl.addArcEmpty("v", p, t);
 		assertFalse(t.isStepable(),
-				"Arc videur : inactif sans jeton => la transition ne doit pas être tirable");
+				"Emptying arc: inactive without a token => the transition must not be stepable");
 	}
 }

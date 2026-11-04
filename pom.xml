@@ -29,14 +29,14 @@
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite</artifactId>
             <version>1.11.4</version>
-            <scope>test</scope>
+            <scope>tests</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <!-- Notre arborescence : src/main et src/test (pas src/main/java) -->
+        <!-- Notre arborescence : src/main et src/tests -->
         <sourceDirectory>src/main</sourceDirectory>
-        <testSourceDirectory>src/test</testSourceDirectory>
+        <testSourceDirectory>src/tests</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

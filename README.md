@@ -20,12 +20,12 @@ petri_network/
     │   ├── OutArc.java             # Arc transition -> place (produit des jetons)
     │   ├── ArcZero.java            # Arc zéro : actif seulement si la place source est vide
     │   └── ArcEmpty.java           # Arc videur : actif dès qu'il y a un jeton, vide la place au tir
-    └── test/
+    └── tests/
         ├── TestPlace.java          # Tests JUnit de Place
         ├── TestTransition.java     # Tests JUnit de Transition et du tir
         ├── TestInArc.java          # Tests JUnit de InArc, ArcEmpty et ArcZero
         ├── TestOutArc.java         # Tests JUnit de OutArc
-        ├── AllTests.java           # Suite JUnit qui lance TestPlace et TestTransition
+        ├── AllTests.java           # Suite JUnit qui lance les 4 classes de tests JUnit
         └── TestPetriLattice.java   # Scénario de démonstration (main, sans JUnit)
 ```
 
@@ -38,11 +38,11 @@ petri_network/
 
 `TestPetriLattice` construit un réseau à une transition (2 arcs entrants, 2 arcs sortants, un arc zéro, un arc videur), affiche les places avant et après un tir, puis supprime une place et ses arcs.
 
-- **VS Code / IntelliJ** : ouvrir `src/test/TestPetriLattice.java` puis cliquer sur *Run* au-dessus de `main`.
+- **VS Code / IntelliJ** : ouvrir `src/tests/TestPetriLattice.java` puis cliquer sur *Run* au-dessus de `main`.
 - **Ligne de commande**, depuis `petri_network/` :
 
 ```bash
-javac -d out src/main/*.java src/test/TestPetriLattice.java
+javac -d out src/main/*.java src/tests/TestPetriLattice.java
 java -cp out TestPetriLattice
 ```
 
@@ -81,16 +81,16 @@ Avant chaque test : une place `P0` vide.
 
 | Test | Ce qui est vérifié |
 |---|---|
-| `testConstructeur` | `new Place("P3", 3)` a le bon nom et 3 jetons |
+| `testConstructor` | `new Place("P3", 3)` a le bon nom et 3 jetons |
 | `testGetToken` | `P0` contient 0 jeton |
 | `testGetName` | `getName()` renvoie `P0` |
 | `testSetName` | `setName("P1")` change le nom |
 | `testToString` | L'affichage vaut `Place (P0) : 0` |
 | `testAddToken` | Ajouts successifs : 0 + 2 = 2, puis 2 + 3 = 5 |
 | `testRemoveToken` | Retraits successifs : 3 − 1 = 2, puis 2 − 2 = 0 |
-| `testConstructeurJetonsNegatifs` | Créer une place avec −2 jetons lève `IllegalArgumentException` (exigence 7) |
-| `testRemoveTokenPlusQueDisponible` | Retirer 2 jetons d'une place qui n'en a qu'un lève `IllegalArgumentException` (exigence 7) |
-| `testAddTokenNegatif` | `addToken(-3)` lève `IllegalArgumentException` (exigence 7) |
+| `testConstructorNegativeTokens` | Créer une place avec −2 jetons lève `IllegalArgumentException` (exigence 7) |
+| `testRemoveTokenMoreThanAvailable` | Retirer 2 jetons d'une place qui n'en a qu'un lève `IllegalArgumentException` (exigence 7) |
+| `testAddTokenNegative` | `addToken(-3)` lève `IllegalArgumentException` (exigence 7) |
 
 ### `TestTransition` (18 tests)
 
@@ -104,24 +104,24 @@ Les tests d'arcs zéro et videurs ajoutent leur propre place et leur propre tran
 
 | Test | Ce qui est vérifié |
 |---|---|
-| `testConstructeur` | Une transition neuve a le bon nom et aucun arc |
+| `testConstructor` | Une transition neuve a le bon nom et aucun arc |
 | `testSetName` | `setName()` change le nom |
 | `testAddInArc` | `addInArc` crée un arc entrant de poids 2, relié à la bonne place, rangé dans la transition et dans le réseau |
 | `testAddOutArc` | Même chose pour `addOutArc` avec un arc sortant |
-| `testAddArcsDirectementSurTransition` | `Transition.addInArc` et `addOutArc` rangent des arcs créés à la main |
-| `testUnSeulArcEntrantParPlace` | Un 2e arc P0 → T0 lève `IllegalArgumentException` (exigence 3) |
-| `testUnSeulArcSortantParPlace` | Un 2e arc T0 → P1 lève `IllegalArgumentException` (exigence 3) |
+| `testAddArcsDirectlyOnTransition` | `Transition.addInArc` et `addOutArc` rangent des arcs créés à la main |
+| `testOnlyOneInArcPerPlace` | Un 2e arc P0 → T0 lève `IllegalArgumentException` (exigence 3) |
+| `testOnlyOneOutArcPerPlace` | Un 2e arc T0 → P1 lève `IllegalArgumentException` (exigence 3) |
 | `testIsStepable` | T0 est tirable (P0 a le jeton demandé), T1 ne l'est pas (P1 est vide) |
 | `testStep` | Tirer T0 donne P0 = 0 et P1 = 2 ; ensuite T0 n'est plus tirable et T1 le devient |
-| `testStepNonTirableNeChangeRien` | Tirer T1, non tirable, ne modifie aucune place |
-| `testDeuxStepsSuccessifs` | Un 2e tir de T0 est sans effet (P0 = 0, P1 = 2) |
+| `testStepNotStepableChangesNothing` | Tirer T1, non tirable, ne modifie aucune place |
+| `testTwoConsecutiveSteps` | Un 2e tir de T0 est sans effet (P0 = 0, P1 = 2) |
 | `testCycle` | Tirer T0 puis T1 donne P0 = 2 et P1 = 1 |
-| `testTransitionSansArcEntrantEstTirable` | Une transition sans arc entrant, reliée à une place vide, est tirable, ajoute 1 jeton et reste tirable (cas proposé dans le cahier des charges) |
-| `testArcZeroPlaceVideTirable` | Avec un arc zéro sur une place vide, la transition est tirable |
-| `testArcZeroStepNeModifiePasLaPlace` | Le tir par un arc zéro ne retire rien de la place source, et l'arc sortant ajoute bien 1 jeton |
-| `testArcZeroPlaceNonVideNonTirable` | Avec un arc zéro sur une place qui contient un jeton, la transition n'est pas tirable |
-| `testArcVideurVideLaPlace` | Avec un arc videur sur une place à 3 jetons, la transition est tirable et le tir vide la place |
-| `testArcVideurPlaceVideNonTirable` | Avec un arc videur sur une place vide, la transition n'est pas tirable |
+| `testTransitionWithoutInArcIsStepable` | Une transition sans arc entrant, reliée à une place vide, est tirable, ajoute 1 jeton et reste tirable (cas proposé dans le cahier des charges) |
+| `testArcZeroEmptyPlaceStepable` | Avec un arc zéro sur une place vide, la transition est tirable |
+| `testArcZeroStepDoesNotModifyPlace` | Le tir par un arc zéro ne retire rien de la place source, et l'arc sortant ajoute bien 1 jeton |
+| `testArcZeroNonEmptyPlaceNotStepable` | Avec un arc zéro sur une place qui contient un jeton, la transition n'est pas tirable |
+| `testArcEmptyEmptiesPlace` | Avec un arc videur sur une place à 3 jetons, la transition est tirable et le tir vide la place |
+| `testArcEmptyEmptyPlaceNotStepable` | Avec un arc videur sur une place vide, la transition n'est pas tirable |
 
 ### `TestInArc` (22 tests)
 
@@ -129,28 +129,28 @@ Avant chaque test : une place `P0` vide et un arc entrant `A0` de poids 3 relié
 
 | Test | Ce qui est vérifié |
 |---|---|
-| `testConstructeurInArc` | `A0` a le bon nom, le poids 3 et la place `P0` |
-| `testConstructeurInArcPoidsNegatif` | Créer un arc de poids −1 lève `IllegalArgumentException` |
+| `testConstructorInArc` | `A0` a le bon nom, le poids 3 et la place `P0` |
+| `testConstructorInArcNegativeWeight` | Créer un arc de poids −1 ou 0 lève `IllegalArgumentException` |
 | `testGetWeight` | `getWeight()` renvoie 3 |
 | `testGetName` | `getName()` renvoie `A0` |
 | `testSetName` | `setName("A1")` change le nom |
 | `testGetPlace` | `getPlace()` renvoie la place `P0` |
 | `testSetPlace` | `setPlace()` relie l'arc à une autre place (`P1`) |
-| `testToString` | L'affichage vaut `Arc entrant (A0) : 3` |
+| `testToString` | L'affichage vaut `Incoming arc (A0) : 3` |
 | `testSetWeight` | `setWeight(5)` change le poids |
-| `testSetWeightNegatif` | `setWeight(-1)` lève `IllegalArgumentException` |
+| `testSetWeightNegative` | `setWeight(-1)` lève `IllegalArgumentException` |
 | `testIsActive` | Rattaché à une transition, l'arc est inactif quand `P0` est vide et devient actif avec 3 jetons (poids) |
 | `testStep` | Tirer l'arc sur une place vide lève `IllegalArgumentException` ; avec 5 jetons, le tir en retire 3 (il en reste 2) |
-| `testConstructeurArcEmpty` | `AE0` a le bon nom, un poids de 0 et la place `P0` |
+| `testConstructorArcEmpty` | `AE0` a le bon nom, un poids de 0 et la place `P0` |
 | `testIsActiveArcEmpty` | L'arc videur est inactif sur une place vide et actif dès qu'elle contient 1 jeton |
 | `testStepArcEmpty` | Tirer l'arc videur sur une place vide lève `IllegalArgumentException` ; avec 5 jetons, le tir vide la place |
 | `testSetWeightArcEmpty` | `setWeight(1)` sur un arc videur lève `UnsupportedOperationException` |
-| `testToStringArcEmpty` | L'affichage vaut `Arc entrant vide (AE0)` |
-| `testConstructeurArcZero` | `AZ0` a le bon nom, un poids de 0 et la place `P0` |
+| `testToStringArcEmpty` | L'affichage vaut `Emptying arc (AE0)` |
+| `testConstructorArcZero` | `AZ0` a le bon nom, un poids de 0 et la place `P0` |
 | `testIsActiveArcZero` | L'arc zéro est actif sur une place vide et inactif dès qu'elle contient 1 jeton |
 | `testStepArcZero` | Tirer l'arc zéro sur une place vide ne change rien ; avec 5 jetons, le tir lève `IllegalArgumentException` |
 | `testSetWeightArcZero` | `setWeight(1)` sur un arc zéro lève `UnsupportedOperationException` |
-| `testToStringArcZero` | L'affichage vaut `Arc entrant zéro (AZ0)` |
+| `testToStringArcZero` | L'affichage vaut `Zero arc (AZ0)` |
 
 ### `TestOutArc` (11 tests)
 
@@ -158,16 +158,16 @@ Avant chaque test : une place `P0` vide et un arc sortant `A0` de poids 3 relié
 
 | Test | Ce qui est vérifié |
 |---|---|
-| `testConstructeurOutArc` | `A0` a le bon nom, le poids 3 et la place `P0` |
-| `testConstructeurOutArcPoidsNegatif` | Créer un arc de poids −1 lève `IllegalArgumentException` |
+| `testConstructorOutArc` | `A0` a le bon nom, le poids 3 et la place `P0` |
+| `testConstructorOutArcNegativeWeight` | Créer un arc de poids −1 ou 0 lève `IllegalArgumentException` |
 | `testGetWeight` | `getWeight()` renvoie 3 |
 | `testGetName` | `getName()` renvoie `A0` |
 | `testSetName` | `setName("A1")` change le nom |
 | `testGetPlace` | `getPlace()` renvoie la place `P0` |
 | `testSetPlace` | `setPlace()` relie l'arc à une autre place (`P1`) |
-| `testToString` | L'affichage vaut `Arc sortant (A0) : 3` |
+| `testToString` | L'affichage vaut `Outgoing arc (A0) : 3` |
 | `testSetWeight` | `setWeight(5)` change le poids |
-| `testSetWeightNegatif` | `setWeight(-1)` lève `IllegalArgumentException` |
+| `testSetWeightNegative` | `setWeight(-1)` lève `IllegalArgumentException` |
 | `testStep` | Le tir ajoute 3 jetons à `P0` : 0 puis 3, puis 6 au 2e tir |
 
 ### `TestPetriLattice` (scénario manuel)

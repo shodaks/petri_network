@@ -1,15 +1,17 @@
+import model.Place;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests unitaires de {@link Place}.
+ * Unit tests of {@link Place}.
  *
- * Adaptés du tutoriel JUnit (jroyer) à notre API :
+ * Adapted from the JUnit tutorial (jroyer) to our API:
  * Place(String, int), getToken(), addToken(int), removeToken(int).
- * Les tests sur les arcs, qui étaient portés par Place dans le tutoriel,
- * sont dans TestTransition : chez nous ce sont les transitions qui connaissent leurs arcs.
+ * The tests on arcs, which belonged to Place in the tutorial,
+ * are in TestTransition: in our design transitions are the ones that know their arcs.
  */
 public class TestPlace {
 
@@ -17,12 +19,12 @@ public class TestPlace {
 
 	@BeforeEach
 	void setUp() {
-		// Une place neuve pour chaque test : pas de dépendance à l'ordre d'exécution
+		// A fresh place for each test: no dependency on the execution order
 		p = new Place("P0", 0);
 	}
 
 	@Test
-	void testConstructeur() {
+	void testConstructor() {
 		Place p3 = new Place("P3", 3);
 		assertEquals("P3", p3.getName());
 		assertEquals(3, p3.getToken());
@@ -67,27 +69,27 @@ public class TestPlace {
 		assertEquals(0, p.getToken());
 	}
 
-	// --- Exigence 7 du cahier des charges : « Une place est vide ou contient des jetons »
-	// => le nombre de jetons n'est jamais négatif.
-	// Si vous choisissez de lever une exception sur ces cas, remplacez par assertThrows(...).
+	// --- Requirement 7 of the specification: "A place is empty or contains tokens"
+	// => the number of tokens is never negative.
+	// If an exception is chosen for these cases, use assertThrows(...).
 
 	@Test
-	void testConstructeurJetonsNegatifs() {
+	void testConstructorNegativeTokens() {
 		assertThrows(IllegalArgumentException.class, () -> new Place("P", -2),
-				"Exigence 7 : une place ne peut pas être créée avec un nombre de jetons négatif");
+				"Requirement 7: a place cannot be created with a negative number of tokens");
 	}
 
 	@Test
-	void testRemoveTokenPlusQueDisponible() {
+	void testRemoveTokenMoreThanAvailable() {
 		p.addToken(1);
 		assertThrows(IllegalArgumentException.class, () -> p.removeToken(2),
-				"Exigence 7 : retirer plus de jetons que la place n'en contient ne doit pas la rendre négative");
+				"Requirement 7: removing more tokens than the place holds must not make it negative");
 	}
 
 	@Test
-	void testAddTokenNegatif() {
+	void testAddTokenNegative() {
 		p.addToken(1);
 		assertThrows(IllegalArgumentException.class, () -> p.addToken(-3),
-				"Exigence 7 : addToken avec une valeur négative ne doit pas rendre la place négative");
+				"Requirement 7: addToken with a negative value must not make the place negative");
 	}
 }

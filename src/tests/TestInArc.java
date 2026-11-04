@@ -1,15 +1,21 @@
+import model.ArcEmpty;
+import model.ArcZero;
+import model.InArc;
+import model.Place;
+import model.Transition;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests unitaires de {@link InArc}.
+ * Unit tests of {@link InArc} (and of its subclasses {@link ArcEmpty} and {@link ArcZero}).
  *
- * Adaptés du tutoriel JUnit (jroyer) à notre API :
+ * Adapted from the JUnit tutorial (jroyer) to our API:
  * Arc(String, int, Place), getName(), getWeight(), getPlace(), setName(), setWeight(), setPlace().
- * Les tests sur les arcs, qui étaient portés par Place dans le tutoriel,
- * sont dans TestTransition : chez nous ce sont les transitions qui connaissent leurs arcs.
+ * The tests on arcs, which belonged to Place in the tutorial,
+ * are in TestTransition: in our design transitions are the ones that know their arcs.
  */
 
 
@@ -21,22 +27,24 @@ public class TestInArc {
 
 	@BeforeEach
 	void setUp() {
-		// Une place neuve pour chaque test : pas de dépendance à l'ordre d'exécution
+		// A fresh place for each test: no dependency on the execution order
 		p = new Place("P0", 0);
 		a = new InArc("A0", 3, p);
 	}
 
 	@Test
-	void testConstructeurInArc() {
+	void testConstructorInArc() {
 		assertEquals("A0", a.getName());
         assertEquals(3, a.getWeight());
 		assertEquals("P0", a.getPlace().getName());
 	}
 
 	@Test
-	void testConstructeurInArcPoidsNegatif() {
+	void testConstructorInArcNegativeWeight() {
 		assertThrows(IllegalArgumentException.class, () -> new InArc("A0", -1, p),
-				"Exigence 7 : un arc ne peut pas être créé avec un poids négatif");
+				"Requirement 7: an arc cannot have a negative weight");
+		assertThrows(IllegalArgumentException.class, () -> new InArc("A0", 0, p),
+				"Requirement 6: an arc weight must be strictly positive");
 	}
 
 	@Test
@@ -69,7 +77,7 @@ public class TestInArc {
 
 	@Test
 	void testToString() {
-		assertEquals("Arc entrant (A0) : 3", a.toString());
+		assertEquals("Incoming arc (A0) : 3", a.toString());
 	}
 
 	@Test
@@ -79,9 +87,9 @@ public class TestInArc {
 	}
 
 	@Test
-	void testSetWeightNegatif() {
+	void testSetWeightNegative() {
 		assertThrows(IllegalArgumentException.class, () -> a.setWeight(-1),
-				"Exigence 7 : un arc ne peut pas être créé avec un poids négatif");
+				"Requirement 7: an arc cannot have a negative weight");
 	}
 
 	@Test
@@ -96,7 +104,7 @@ public class TestInArc {
 	@Test
 	void testStep() {
 		assertThrows(IllegalArgumentException.class, () -> a.step(),
-				"Exigence 7 : retirer plus de jetons que la place n'en contient ne doit pas la rendre négative");
+				"Requirement 7: removing more tokens than the place holds must not make it negative");
 		p.addToken(5);
 		a.step();
 		assertEquals(2, p.getToken());
@@ -105,10 +113,10 @@ public class TestInArc {
 	// --- ArcEmpty ---
 
 	@Test 
-	void testConstructeurArcEmpty() {
+	void testConstructorArcEmpty() {
 		ArcEmpty ae = new ArcEmpty("AE0", p);
 		assertEquals("AE0", ae.getName());
-		assertEquals(0, ae.getWeight());
+		assertEquals(1, ae.getWeight());
 		assertEquals("P0", ae.getPlace().getName());
 	}
 
@@ -124,7 +132,7 @@ public class TestInArc {
 	void testStepArcEmpty() {
 		ArcEmpty ae = new ArcEmpty("AE0", p);
 		assertThrows(IllegalArgumentException.class, () -> ae.step(),
-				"Exigence 7 : retirer plus de jetons que la place n'en contient ne doit pas la rendre négative");
+				"Requirement 7: removing more tokens than the place holds must not make it negative");
 		p.addToken(5);
 		ae.step();
 		assertEquals(0, p.getToken());
@@ -134,22 +142,22 @@ public class TestInArc {
 	void testSetWeightArcEmpty() {
 		ArcEmpty ae = new ArcEmpty("AE0", p);
 		assertThrows(UnsupportedOperationException.class, () -> ae.setWeight(1),
-				"Exigence 7 : un arc vide ne peut pas avoir de poids");
+				"Requirement 7: an emptying arc cannot have a weight");
 	}
 
 	@Test
 	void testToStringArcEmpty() {
 		ArcEmpty ae = new ArcEmpty("AE0", p);
-		assertEquals("Arc entrant vide (AE0)", ae.toString());
+		assertEquals("Emptying arc (AE0)", ae.toString());
 	}
 
 	// --- ArcZero ---
 
 	@Test 
-	void testConstructeurArcZero() {
+	void testConstructorArcZero() {
 		ArcZero az = new ArcZero("AZ0", p);
 		assertEquals("AZ0", az.getName());
-		assertEquals(0, az.getWeight());
+		assertEquals(1, az.getWeight());
 		assertEquals("P0", az.getPlace().getName());
 	}
 
@@ -168,20 +176,20 @@ public class TestInArc {
 		assertEquals(0, p.getToken());
 		p.addToken(5);
 		assertThrows(IllegalArgumentException.class, () -> az.step(),
-				"Exigence 7 : retirer plus de jetons que la place n'en contient ne doit pas la rendre négative");
+				"Requirement 7: removing more tokens than the place holds must not make it negative");
 	}
 
 	@Test
 	void testSetWeightArcZero() {
 		ArcZero az = new ArcZero("AZ0", p);
 		assertThrows(UnsupportedOperationException.class, () -> az.setWeight(1),
-				"Exigence 7 : un arc zéro ne peut pas avoir de poids");
+				"Requirement 7: a zero arc cannot have a weight");
 	}
 
 	@Test
 	void testToStringArcZero() {
 		ArcZero az = new ArcZero("AZ0", p);
-		assertEquals("Arc entrant zéro (AZ0)", az.toString());
+		assertEquals("Zero arc (AZ0)", az.toString());
 	}
 
 }
