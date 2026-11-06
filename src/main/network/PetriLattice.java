@@ -8,6 +8,7 @@ import model.*;
  */
 public class PetriLattice implements PetriLatticeInterface{
 
+    private String name;
     private ArrayList<Transition> transitions;
     private ArrayList<Place> places;
     private ArrayList<Arc> arcs;
@@ -15,11 +16,20 @@ public class PetriLattice implements PetriLatticeInterface{
     /**
      * Creates an empty Petri net.
      */
-    public PetriLattice(){
+    public PetriLattice(String name){
+        this.name = name;
         this.transitions = new ArrayList<>();
         this.places = new ArrayList<>();
         this.arcs = new ArrayList<>();
 
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String newName) {
+        this.name = newName;
     }
 
     /**
@@ -227,6 +237,35 @@ public class PetriLattice implements PetriLatticeInterface{
     @Override
     public void removeTransition(Transition transition) {
         transitions.remove(transition);
+        for (Arc a : transition.getInArcs()){
+            this.places.remove(a.getPlace());
+            this.arcs.remove(a);
+        }
+        for (Arc a : transition.getOutArcs()){
+            this.places.remove(a.getPlace());
+            this.arcs.remove(a);
+        }
+    }
+
+    /**
+     * Removes an Arc from the Petri net.
+     *
+     * @param Arc the transition to remove
+     */
+    @Override
+    public void removeArc(Arc Arc) {
+        arcs.remove(Arc);
+        for (Transition t : this.transitions) {
+            if (t.getInArcs().contains(Arc)) {
+                t.getInArcs().remove(Arc);
+                break;
+            }
+            if (t.getOutArcs().contains(Arc)) {
+                t.getOutArcs().remove(Arc);
+                break;
+            }
+        }
+
     }
 
     /**
@@ -252,7 +291,7 @@ public class PetriLattice implements PetriLatticeInterface{
      * before and after a step. It is an instance method, not a program entry point.
      */
     public void main() {
-        PetriLattice PL1 = new PetriLattice();
+        PetriLattice PL1 = new PetriLattice("Petri1");
         Transition t1 = PL1.addTransition("t1");
         Place p1 = PL1.addPlace("p1", 5);
         Place p2 = PL1.addPlace("p2", 2);
@@ -263,7 +302,5 @@ public class PetriLattice implements PetriLatticeInterface{
         System.out.println(PL1.toString());
         t1.step();
         System.out.println(PL1.toString());
-
-        
     }
 }

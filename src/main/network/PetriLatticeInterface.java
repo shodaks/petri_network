@@ -99,6 +99,13 @@ public interface PetriLatticeInterface {
      * @param transition the transition to remove
      */
     public void removeTransition(Transition transition);
+    
 
-    //public void step(Transition transition);    
+    /**
+     * Removes a Arc from the net.
+     *
+     * @param arc the arc to remove
+     */
+    public void removeArc(Arc arc);
+
 }

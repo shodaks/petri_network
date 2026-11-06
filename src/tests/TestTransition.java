@@ -27,7 +27,7 @@ public class TestTransition {
 	 */
 	@BeforeEach
 	void setUp() {
-		pl = new PetriLattice();
+		pl = new PetriLattice("Petri1");
 		p0 = pl.addPlace("P0", 1);
 		p1 = pl.addPlace("P1", 0);
 		t0 = pl.addTransition("T0");
