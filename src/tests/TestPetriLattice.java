@@ -24,8 +24,7 @@ public class TestPetriLattice {
     private PetriLattice pl;
 
     /**
-	 * Network of the tutorial, rebuilt before each test:
-	 * P0(1) -1-> T0 -2-> P1(0) -1-> T1 -2-> P0
+	 * PetriLattice rebuilt before each test:
 	 */
 	@BeforeEach
 	void setUp() {

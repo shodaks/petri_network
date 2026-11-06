@@ -8,25 +8,30 @@ Binôme : Alexis Pujol, Benoît Lot.
 
 ```text
 petri_network/
-├── pom.xml                         # Build Maven et dépendances JUnit 5
+├── pom.xml                              # Build Maven et dépendances JUnit 5
 └── src/
-    ├── main/                       # Code du réseau de Petri
-    │   ├── PetriLatticeInterface.java  # Interface de service : construire et modifier un réseau
-    │   ├── PetriLattice.java       # Le réseau : listes des places, transitions et arcs
-    │   ├── Place.java              # Place et son nombre de jetons
-    │   ├── Transition.java         # Arcs entrants/sortants, isStepable(), step()
-    │   ├── Arc.java                # Arc abstrait : nom, poids, place reliée
-    │   ├── InArc.java              # Arc place -> transition (consomme des jetons)
-    │   ├── OutArc.java             # Arc transition -> place (produit des jetons)
-    │   ├── ArcZero.java            # Arc zéro : actif seulement si la place source est vide
-    │   └── ArcEmpty.java           # Arc videur : actif dès qu'il y a un jeton, vide la place au tir
+    ├── main/                            # Code du réseau de Petri
+    │   ├── model/                       # Éléments du réseau
+    │   │   ├── package-info.java        # Description du paquetage
+    │   │   ├── Place.java               # Place et son nombre de jetons
+    │   │   ├── Transition.java          # Arcs entrants/sortants, isStepable(), step()
+    │   │   ├── Arc.java                 # Arc abstrait : nom, poids, place reliée
+    │   │   ├── InArc.java               # Arc place -> transition (consomme des jetons)
+    │   │   ├── OutArc.java              # Arc transition -> place (produit des jetons)
+    │   │   ├── ArcZero.java             # Arc zéro : actif seulement si la place source est vide
+    │   │   └── ArcEmpty.java            # Arc videur : actif dès qu'il y a un jeton, vide la place au tir
+    │   └── network/                     # Le réseau et son interface de service
+    │       ├── package-info.java        # Description du paquetage
+    │       ├── PetriLatticeInterface.java  # Interface de service : construire et modifier un réseau
+    │       └── PetriLattice.java        # Le réseau : listes des places, transitions et arcs
     └── tests/
-        ├── TestPlace.java          # Tests JUnit de Place
-        ├── TestTransition.java     # Tests JUnit de Transition et du tir
-        ├── TestInArc.java          # Tests JUnit de InArc, ArcEmpty et ArcZero
-        ├── TestOutArc.java         # Tests JUnit de OutArc
-        ├── AllTests.java           # Suite JUnit qui lance les 4 classes de tests JUnit
-        └── TestPetriLattice.java   # Scénario de démonstration (main, sans JUnit)
+        ├── TestPlace.java               # Tests JUnit de Place
+        ├── TestTransition.java          # Tests JUnit de Transition et du tir
+        ├── TestInArc.java               # Tests JUnit de InArc, ArcEmpty et ArcZero
+        ├── TestOutArc.java              # Tests JUnit de OutArc
+        ├── TestPetriLattice.java        # Tests JUnit de PetriLattice
+        ├── AllTests.java                # Suite JUnit qui lance les 5 classes de tests JUnit
+        └── PetriLatticeManualTest.java  # Scénario de démonstration (main, sans JUnit)
 ```
 
 ## Prérequis
@@ -36,14 +41,14 @@ petri_network/
 
 ## Lancer la démonstration
 
-`TestPetriLattice` construit un réseau à une transition (2 arcs entrants, 2 arcs sortants, un arc zéro, un arc videur), affiche les places avant et après un tir, puis supprime une place et ses arcs.
+`PetriLatticeManualTest` construit un réseau à une transition (2 arcs entrants, 2 arcs sortants, un arc zéro, un arc videur), affiche les places et `isStepable()` avant et après un `step()`, puis supprime une place et ses arcs. Comme la place de l'arc zéro (`pl5`) contient un jeton, la transition n'est pas tirable : `isStepable()` affiche `false` et `step()` ne change rien.
 
-- **VS Code / IntelliJ** : ouvrir `src/tests/TestPetriLattice.java` puis cliquer sur *Run* au-dessus de `main`.
-- **Ligne de commande**, depuis `petri_network/` :
+- **VS Code / IntelliJ** : ouvrir `src/tests/PetriLatticeManualTest.java` puis cliquer sur *Run* au-dessus de `main`.
+- **Ligne de commande**, depuis `petri_network/` (`-sourcepath` retrouve les classes des paquetages `model` et `network`) :
 
 ```bash
-javac -d out src/main/*.java src/tests/TestPetriLattice.java
-java -cp out TestPetriLattice
+javac -d out -sourcepath src/main src/tests/PetriLatticeManualTest.java
+java -cp out PetriLatticeManualTest
 ```
 
 ## Lancer les tests
@@ -54,7 +59,11 @@ java -cp out TestPetriLattice
 ## Utiliser le réseau
 
 ```java
-PetriLattice reseau = new PetriLattice();
+import model.Place;
+import model.Transition;
+import network.PetriLattice;
+
+PetriLattice reseau = new PetriLattice("reseau");
 Place p1 = reseau.addPlace("P1", 2);
 Place p2 = reseau.addPlace("P2", 0);
 Transition t = reseau.addTransition("T");
@@ -71,9 +80,9 @@ Les autres types d'arcs entrants s'ajoutent avec `addArcZero(nom, place, transit
 
 ## Description des tests
 
-61 tests JUnit 5, répartis en quatre classes. Ils sont adaptés du tutoriel JUnit fourni par l'enseignant. Chaque test repart d'un état neuf (`@BeforeEach`), donc l'ordre d'exécution n'a pas d'importance.
+84 tests JUnit 5, répartis en cinq classes. Ils sont adaptés du tutoriel JUnit fourni par l'enseignant. Chaque test repart d'un état neuf (`@BeforeEach`), donc l'ordre d'exécution n'a pas d'importance.
 
-`AllTests` lance `TestPlace`, `TestTransition`, `TestInArc` et `TestOutArc`.
+`AllTests` lance `TestPlace`, `TestTransition`, `TestInArc`, `TestOutArc` et `TestPetriLattice`.
 
 ### `TestPlace` (10 tests)
 
@@ -170,12 +179,32 @@ Avant chaque test : une place `P0` vide et un arc sortant `A0` de poids 3 relié
 | `testSetWeightNegative` | `setWeight(-1)` lève `IllegalArgumentException` |
 | `testStep` | Le tir ajoute 3 jetons à `P0` : 0 puis 3, puis 6 au 2e tir |
 
-### `TestPetriLattice` (scénario manuel)
+### `TestPetriLattice` (23 tests)
 
-Ce n'est pas un test JUnit : c'est un `main` sans assertions, dont on lit le résultat dans la console (voir « Lancer la démonstration »). Il construit une transition `tr1` avec deux arcs entrants (`pl1`, poids 2 ; `pl2`, poids 3), deux arcs sortants (`pl3`, poids 4 ; `pl4`, poids 1), un arc zéro depuis `pl5` et un arc videur depuis `pl6`. Il affiche les places et `isStepable()` avant et après un `step()`, puis supprime `pl6` et affiche la liste des arcs pour contrôler que l'arc videur a disparu.
+Avant chaque test : un réseau vide nommé `Petri1`. Les tests d'ajout et de suppression créent leurs propres places, transitions et arcs.
 
-### Ce que les tests ne couvrent pas
-
-- La suppression d'éléments : `removeArc`, `removePlace` et `removeTransition` (`removePlace` n'est exercée que par le scénario `TestPetriLattice`).
-- Les doublons créés avec `addArcZero` ou `addArcEmpty` (l'exigence 3 n'est testée que pour `addInArc` et `addOutArc`).
-- L'affichage du réseau (`PetriLattice.toString()`).
+| Test | Ce qui est vérifié |
+|---|---|
+| `testConstructor` | `new PetriLattice("Petri")` a le bon nom et aucune transition, place ni arc |
+| `testGetName` | `getName()` renvoie `Petri1` |
+| `testSetName` | `setName("Petri2")` change le nom |
+| `testAddPlace` | `addPlace` ajoute une place au réseau |
+| `testAddPlaceNegativeWeight` | Créer une place avec −1 jeton lève `IllegalArgumentException` |
+| `testGetPlaces` | `getPlaces()` renvoie les deux places ajoutées, dans l'ordre d'ajout |
+| `testGetPlacesEmpty` | Un réseau neuf n'a aucune place |
+| `testRemovePlace` | Supprimer une place reliée à un arc entrant retire la place et l'arc du réseau |
+| `testAddTransition` | `addTransition` ajoute une transition au réseau |
+| `testGetTransitions` | `getTransitions()` renvoie les deux transitions ajoutées, dans l'ordre d'ajout |
+| `testGetTransitionsEmpty` | Un réseau neuf n'a aucune transition |
+| `testRemoveTransition` | Supprimer une transition qui porte un arc entrant retire la transition et l'arc du réseau |
+| `testRemoveArc` | `removeArc(arc)` retire l'arc du réseau et de la liste des arcs entrants de sa transition |
+| `testGetArcs` | `getArcs()` renvoie l'arc ajouté |
+| `testGetArcsEmpty` | Un réseau neuf n'a aucun arc |
+| `testAddInArc` | `addInArc` ajoute un arc entrant au réseau |
+| `testAddInArcNegativeWeight` | Un arc entrant de poids −1 lève `IllegalArgumentException` |
+| `testAddInArcDuplicate` | Un 2e arc entrant entre la même place et la même transition lève `IllegalArgumentException` (exigence 3) |
+| `testAddOutArc` | `addOutArc` ajoute un arc sortant au réseau |
+| `testAddOutArcNegativeWeight` | Un arc sortant de poids −1 lève `IllegalArgumentException` |
+| `testAddOutArcDuplicate` | Un 2e arc sortant entre la même transition et la même place lève `IllegalArgumentException` (exigence 3) |
+| `testAddArcEmpty` | `addArcEmpty` ajoute un arc videur au réseau |
+| `testAddArcZero` | `addArcZero` ajoute un arc zéro au réseau |
