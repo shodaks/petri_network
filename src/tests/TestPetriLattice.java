@@ -9,6 +9,7 @@ import model.Transition;
 import model.Place;
 import model.InArc;
 import model.OutArc;
+import model.Arc;
 
 /**
  * Unit tests of {@link PetriLattice}.
@@ -88,10 +89,12 @@ public class TestPetriLattice {
     void testRemovePlace() {
         Place p0 = pl.addPlace("P0", 1);
         Transition t0 = pl.addTransition("T0");
-        pl.addInArc("a0", 1, p0, t0);
+        Arc a0 = pl.addInArc("a0", 1, p0, t0);
         pl.removePlace(p0);
-        assertEquals(0, pl.getPlaces().size());
-        assertEquals(0, pl.getArcs().size());
+        assertFalse(pl.getArcs().contains(a0));
+        assertFalse(t0.getInArcs().contains(a0));
+        assertFalse(pl.getPlaces().contains(p0));
+        assertTrue(pl.getTransitions().contains(t0));
     }
 
     // ---------------------------------------------------------------- Transitions
@@ -121,10 +124,11 @@ public class TestPetriLattice {
     void testRemoveTransition() {
         Place p0 = pl.addPlace("P0", 1);
         Transition t0 = pl.addTransition("T0");
-        pl.addInArc("a0", 1, p0, t0);
+        Arc a0 = pl.addInArc("a0", 1, p0, t0);
         pl.removeTransition(t0);
-        assertEquals(0, pl.getTransitions().size());
-        assertEquals(0, pl.getArcs().size());
+        assertFalse(pl.getArcs().contains(a0));
+        assertFalse(pl.getTransitions().contains(t0));
+        assertTrue(pl.getPlaces().contains(p0));
     }
 
     // ---------------------------------------------------------------- Arc
@@ -135,8 +139,10 @@ public class TestPetriLattice {
         Transition t0 = pl.addTransition("T0");
         InArc a0 = pl.addInArc("a0", 1, p0, t0);
         pl.removeArc(a0);
-        assertEquals(0, pl.getArcs().size());
+        assertFalse(pl.getArcs().contains(a0));
         assertFalse(t0.getInArcs().contains(a0));
+        assertTrue(pl.getPlaces().contains(p0));
+        assertTrue(pl.getTransitions().contains(t0));
     }
 
     @Test

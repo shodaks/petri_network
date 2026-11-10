@@ -238,11 +238,9 @@ public class PetriLattice implements PetriLatticeInterface{
     public void removeTransition(Transition transition) {
         transitions.remove(transition);
         for (Arc a : transition.getInArcs()){
-            this.places.remove(a.getPlace());
             this.arcs.remove(a);
         }
         for (Arc a : transition.getOutArcs()){
-            this.places.remove(a.getPlace());
             this.arcs.remove(a);
         }
     }
@@ -265,7 +263,6 @@ public class PetriLattice implements PetriLatticeInterface{
                 break;
             }
         }
-
     }
 
     /**
