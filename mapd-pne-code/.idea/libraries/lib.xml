@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/hamcrest-core-1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javax.xml.bind.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/pn-imta-initial-models-and-adapters.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
